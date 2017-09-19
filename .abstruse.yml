@@ -1,14 +1,9 @@
 image: java
 
 matrix:
-   - env: SCRIPT=test
+   - env: DISPLAY=:0
 
 install:
    - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V -e
-
-script:
-   - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar -Dsonar.host.url=https://sonarqube.com -Dsonar.login=$SONAR_TOKEN
+   - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar -Dsonar.host.url=https://sonarqube.com -Dsonar.login=$SONAR_TOKEN -Djava.awt.headless=true
    - bash update-ghpages.sh
-
-cache:
-   - node_modules

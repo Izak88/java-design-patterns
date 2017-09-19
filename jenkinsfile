@@ -1,0 +1,21 @@
+pipeline {
+    agent any
+    stages {
+	stage('install') {
+	   steps {
+		timestamps {
+		   sh 'rm -rf /home/izak/.m2/repository/*'
+		   sh 'mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V -e'
+		}
+	   }
+	}
+        stage('test') {
+            steps {
+		timestamps {
+		sh 'mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar -Dsonar.host.url=https://sonarqube.com -Dsonar.login=$SONAR_TOKEN'
+                sh 'bash update-ghpages.sh'
+		}
+            }
+        }
+    }
+}
