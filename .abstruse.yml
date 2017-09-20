@@ -1,9 +1,13 @@
-image: java
+image: abstruse
 
 matrix:
-   - env: DISPLAY=:0
+   - env: DISPLAY=:99
 
 install:
    - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V -e
+
+script:
    - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar -Dsonar.host.url=https://sonarqube.com -Dsonar.login=$SONAR_TOKEN -Djava.awt.headless=true
-   - bash update-ghpages.sh
+
+cache:
+   - /home/abstruse/.m2/repository
